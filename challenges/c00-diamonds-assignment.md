@@ -97,7 +97,16 @@ document your observations.
 
 ``` r
 ## TASK: Plot `price` vs `carat` below
-ggplot(diamonds) + geom_point(mapping = aes(x = carat, y = price))
+## Practicing correct line separation formatting
+
+diamonds %>%
+  ggplot(
+    mapping = aes(
+      x = carat, 
+      y = price
+    )
+  ) +
+  geom_point()
 ```
 
 ![](c00-diamonds-assignment_files/figure-gfm/q1-task-1.png)<!-- -->
@@ -115,8 +124,10 @@ ggplot(diamonds) + geom_point(mapping = aes(x = carat, y = price))
 
 ``` r
 ## TASK: Plot `price`, `carat`, and `cut` below
-ggplot(diamonds) + 
-geom_point(mapping = aes(x = carat, y = price, color = cut))
+
+diamonds %>%
+  ggplot(mapping = aes(x = carat, y = price, color = cut)) + 
+  geom_point()
 ```
 
 ![](c00-diamonds-assignment_files/figure-gfm/q2-task-1.png)<!-- -->
@@ -128,8 +139,8 @@ geom_point(mapping = aes(x = carat, y = price, color = cut))
 - There are ideal cut diamonds across almost all cuts and prices
 - There are many categories of cut available at similar price and carat
 - The data is hard to read because dots overlay other dots
-- The lowest priced options at higher carats tend to be lower-quality
-  cuts
+- Between 1.5-2.5 carats, the lowest priced options tend to be
+  lower-quality cuts
 
 # Communication
 

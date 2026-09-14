@@ -28,7 +28,7 @@ Unlike exercises, **challenges will be graded**. The following rubrics define ho
 <!-- ------------------------- -->
 
 | Category | Needs Improvement | Satisfactory |
-|-------------------|-----------------------------|-------------------------|
+|------------------------|------------------------|------------------------|
 | Effort | Some task **q**'s left unattempted | All task **q**'s attempted |
 | Observed | Did not document observations, or observations incorrect | Documented correct observations based on analysis |
 | Supported | Some observations not clearly supported by analysis | All observations clearly supported by analysis (table, graph, etc.) |
@@ -58,7 +58,16 @@ In this first stage, you will explore the `diamonds` dataset and document your o
 
 ```{r q1-task}
 ## TASK: Plot `price` vs `carat` below
-ggplot(diamonds) + geom_point(mapping = aes(x = carat, y = price))
+## Practicing correct line separation formatting
+
+diamonds %>%
+  ggplot(
+    mapping = aes(
+      x = carat, 
+      y = price
+    )
+  ) +
+  geom_point()
 ```
 
 **Observations**:
@@ -72,8 +81,10 @@ ggplot(diamonds) + geom_point(mapping = aes(x = carat, y = price))
 
 ```{r q2-task}
 ## TASK: Plot `price`, `carat`, and `cut` below
-ggplot(diamonds) + 
-geom_point(mapping = aes(x = carat, y = price, color = cut))
+
+diamonds %>%
+  ggplot(mapping = aes(x = carat, y = price, color = cut)) + 
+  geom_point()
 ```
 
 **Observations**:
@@ -82,7 +93,7 @@ geom_point(mapping = aes(x = carat, y = price, color = cut))
 - There are ideal cut diamonds across almost all cuts and prices
 - There are many categories of cut available at similar price and carat
 - The data is hard to read because dots overlay other dots
-- The lowest priced options at higher carats tend to be lower-quality cuts
+- Between 1.5-2.5 carats, the lowest priced options tend to be lower-quality cuts
 
 # Communication
 
