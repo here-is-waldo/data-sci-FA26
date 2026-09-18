@@ -35,7 +35,7 @@ define how you will be graded, both on an individual and team basis.
 <!-- ------------------------- -->
 
 | Category | Needs Improvement | Satisfactory |
-|-------------------|----------------------------|-------------------------|
+|----|----|----|
 | Effort | Some task **q**'s left unattempted | All task **q**'s attempted |
 | Observed | Did not document observations, or observations incorrect | Documented correct observations based on analysis |
 | Supported | Some observations not clearly supported by analysis | All observations clearly supported by analysis (table, graph, etc.) |
@@ -323,7 +323,7 @@ df_q2 %>%
   the uncertainty interval) the true speed of light
 - There are multiple levels of distinctness within measurements from a
   single day
--  The day with all level 1 ("poor") distinctness has higher accuracy
+- The day with all level 1 ("poor") distinctness has higher accuracy
   than most days with only level 3 observations.
 
 ```{r}
@@ -355,7 +355,7 @@ df_q2 %>%
   geom_hline(
     yintercept = LIGHTSPEED_MICHELSON,
     linetype = "dotted"
-  )
+  ) +
   labs(
     x = "Temperature (F)",
     y = "Velocity (in Vacuum)"

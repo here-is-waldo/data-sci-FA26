@@ -419,21 +419,14 @@ df_q2 %>%
   geom_hline(
     yintercept = LIGHTSPEED_MICHELSON,
     linetype = "dotted"
-  )
-```
-
-![](c02-michelson-assignment_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
-
-``` r
+  ) +
   labs(
     x = "Temperature (F)",
     y = "Velocity (in Vacuum)"
   )
 ```
 
-    ## <ggplot2::labels> List of 2
-    ##  $ x: chr "Temperature (F)"
-    ##  $ y: chr "Velocity (in Vacuum)"
+![](c02-michelson-assignment_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
 
 **Observations cont.**:
 
