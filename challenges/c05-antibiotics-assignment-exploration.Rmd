@@ -1,9 +1,8 @@
 ---
-title: "Antibiotics"
+title: "c05-antibiotics-exploration.Rmd"
 author: "Luca Odio"
-date: 2026-10-5
-output:
-  github_document
+date: "2026-10-08"
+output: html_document
 editor_options: 
   markdown: 
     wrap: 72
@@ -42,7 +41,7 @@ define how you will be graded, both on an individual and team basis.
 <!-- ------------------------- -->
 
 | Category | Needs Improvement | Satisfactory |
-|------------------------|------------------------|------------------------|
+|----|----|----|
 | Effort | Some task **q**'s left unattempted | All task **q**'s attempted |
 | Observed | Did not document observations, or observations incorrect | Documented correct observations based on analysis |
 | Supported | Some observations not clearly supported by analysis | All observations clearly supported by analysis (table, graph, etc.) |
@@ -294,34 +293,10 @@ opportunity to think about why this is.**
 > How do the three antibiotics vary in their effectiveness against
 > bacteria of different genera and Gram stain?
 
-*Observations* - What is your response to the question above?
-
-Penicillin is effective (MIC \<0.1) against almost all (all but one) of
-the gram stain positive bacteria, and none of the gram stain negative
-bacteria. Neomycin and Streptomycin don't have such clearly delineated
-results. The fewest bacteria strains are susceptible to Streptomycin,
-and gram stain positive bacteria have a range of MICs. Gram stain
-negative bacteria are a little more grouped around 0.1 MIC, but the log
-scale makes it difficult to evaluate.
-
-Regarding genera, it is difficult to discern patterns because there are
-only three genera with multiple bacteria strains in this data set. The
-genera that do have data on multiple bacteria have few data points (2-3)
-so it is hard to tell what's a pattern and what's coincidence. It
-appears that the bacterial responses to Penicillin may be more
-consistent across genera than for Neomycin or Streptomycin, but more
-data (within few genera) should be used to better understand genus-level
-similarities in MIC.
-
-Which of your visuals above (1 through 5) is **most effective** at
-helping to answer this question? Why?
-
-My visual 1. It shows the distribution of MIC for each bacteria and each
-antibiotic, and uses color to indicate the gram stain status. It is easy
-to see the distribution of values for any given antibiotic and visually
-discern patterns relating to gram stain. The bacteria are listed by
-name, so bacteria of the same genus are sequential, which is helpful for
-analysis, but not overly evident information at first glance.
+*Observations* - What is your response to the question above? - (Write
+your response here) - Which of your visuals above (1 through 5) is
+**most effective** at helping to answer this question? - (Write your
+response here) - Why? - (Write your response here)
 
 #### Guiding Question 2
 
@@ -332,27 +307,267 @@ and in 1984 *Streptococcus fecalis* was renamed *Enterococcus fecalis*
 > Why was *Diplococcus pneumoniae* was renamed *Streptococcus
 > pneumoniae*?
 
-*Observations* - What is your response to the question above?
+*Observations* - What is your response to the question above? - (Write
+your response here) - Which of your visuals above (1 through 5) is
+**most effective** at helping to answer this question? - (Write your
+response here) - Why? - (Write your response here)
 
-Diplococcus pneumoniae was renamed Streptococcus pneumoniae because
-further research found that the bacteria displayed chain-forming
-behavior (a characteristic of the Streptococcus genus) in liquid media.
+```{r}
+# box plot for all
+df_antibiotics_mod %>%
+  ggplot(aes(antibiotic, MIC)) +
+  geom_boxplot() +
+  scale_y_log10()
+  
 
-Which of your visuals above (1 through 5) is **most effective** at
-helping to answer this question? Why?
+```
 
-None of my visuals would conclusively suggest this outcome. The most
-effective visual was visual 4, where Diplococcus pneumoniae is clustered
-with two Streptococcus bacteria on a Neomycin MIC vs Pencillin MIC
-log-log plot. This indicates that Diplococcus pneumoniae shared similar
-sensitivities to both antibiotics as two of the three Streptococcus
-bacteria. The third Streptococcus bacteria that was not included in the
-cluster was Streptococcus fecalis, which was later reclassified as well.
-The antibiotics operate differently, and target different aspects of a
-bacteria's form (cell wall, ribosome functionality). The fact that
-Diplococcus pneumoniae shared such similar responses to the true
-Streptococcus bacteria is a clue that there may be greater similarities
-in biological form than suggested by the initial genus classification.
+```{r}
+# box plots by genus
+df_antibiotics_mod %>%
+  ggplot(aes(MIC, genus)) +
+  facet_grid(rows = vars(antibiotic)) +
+  geom_boxplot() +
+  scale_x_log10() 
+
+```
+
+```{r}
+df_antibiotics_mod %>%
+  filter(genus == "Streptococcus") %>%
+  ggplot(aes(bacteria, MIC, color = antibiotic, shape = gram)) +
+  geom_hline(
+    yintercept = max_MIC,
+    linetype = "dashed"
+  ) +
+  geom_point(size = 2) +
+  scale_y_log10() 
+  
+
+```
+
+```{r}
+df_antibiotics_mod %>%
+  ggplot(aes(
+    x = MIC,
+    y = bacteria
+  )) +
+  facet_grid(rows = vars(gram), cols = vars(antibiotic)) +
+  geom_point() +
+  scale_x_log10() +
+  geom_vline(
+    xintercept = max_MIC,
+    linetype = "dashed"
+  ) +
+  labs(
+    title = "Bacterial Response by Gram Stain Status "
+  )
+
+```
+
+There does not appear to be a strict relationship between gram stain
+status and responsiveness to specific antibiotics, except perhaps for
+penicillin. There *should* be a relationship here, according to science.
+Maybe the log axis is messing me up?
+
+```{r}
+
+df_antibiotics %>%
+  mutate(genus = word(bacteria, 1)) %>%
+  ggplot(aes(
+    x = penicillin,
+    y = neomycin,
+    color = genus
+  )) +
+  facet_grid(rows = vars(gram)) +
+  geom_point() +
+  scale_x_log10() + scale_y_log10() +
+  geom_vline(
+    xintercept = max_MIC,
+    linetype = "dashed"
+  )
+
+```
+
+```{r}
+df_antibiotics %>%
+  mutate(genus = word(bacteria, 1)) %>%
+  ggplot(aes(
+    x = penicillin,
+    y = streptomycin,
+    color = genus
+  )) +
+  facet_grid(rows = vars(gram)) +
+  geom_point() +
+  scale_x_log10() + scale_y_log10() +
+  geom_vline(
+    xintercept = max_MIC,
+    linetype = "dashed"
+  )
+```
+
+```{r}
+df_antibiotics %>%
+  mutate(genus = word(bacteria, 1)) %>%
+  ggplot(aes(
+    x = neomycin,
+    y = streptomycin,
+    color = genus
+  )) +
+  facet_grid(rows = vars(gram)) +
+  geom_point(size = 2) +
+  scale_x_log10() + scale_y_log10() +
+  geom_vline(
+    xintercept = max_MIC,
+    linetype = "dashed"
+  )
+
+```
+
+```{r}
+# just look at changed
+special = c("Streptococcus hemolyticus", "Streptococcus fecalis", 
+            "Streptococcus viridans",  "Diplococcus pneumonia")
+df_antibiotics_mod %>%
+  filter(bacteria %in% special) %>%
+  ggplot(aes(
+    x = MIC, 
+    y = bacteria
+  )) +
+  scale_x_log10() +
+  facet_grid(cols = vars(antibiotic)) +
+  geom_point(size = 2) +
+  geom_vline(
+    xintercept = max_MIC,
+    linetype = "dotted"
+  )
+```
+
+```{r}
+df_antibiotics_mod %>%
+  ggplot(aes(
+    x = MIC, 
+    y = bacteria, 
+  )) +
+  scale_x_log10() +
+  facet_grid(cols = vars(antibiotic)) +
+  geom_point(size = 2) +
+  geom_point(
+    data = . %>% filter(bacteria %in% special),
+    mapping = aes(color = "blue"),
+    size = 2
+  )
+  geom_vline(
+    xintercept = max_MIC,
+    linetype = "dotted"
+  )
+
+```
+
+```{r}
+# only color genuses w/ more than one bacteria
+genus_color <- c("Streptococcus", "Staphylococcus", "Salmonella", "Diplococcus")
+
+df_antibiotics %>%
+  mutate(genus = word(bacteria, 1)) %>%
+  ggplot(aes(
+    x = penicillin,
+    y = neomycin,
+    shape = gram
+  )) +
+  # facet_grid(rows = vars(gram)) +
+  geom_point(size = 2) +
+  geom_point(
+    data = . %>% filter(genus %in% genus_color),
+    mapping = aes(color = genus),
+    size = 2
+  ) +
+  scale_x_log10() + scale_y_log10() +
+  geom_vline(
+    xintercept = max_MIC,
+    linetype = "dashed"
+  ) +
+  labs(
+    #title = ""
+    x = "Penicillin MIC",
+    y = "Neomycin MIC",
+    color = "Genus",
+    shape = "Gram stain"
+  )
+```
+
+```{r}
+df_antibiotics %>%
+  mutate(genus = word(bacteria, 1)) %>%
+  ggplot(aes(
+    x = penicillin,
+    y = streptomycin,
+    shape = gram
+  )) +
+  facet_grid(rows = vars(gram)) +
+  geom_point(size = 2) +
+  geom_point(
+    data = . %>% filter(genus %in% genus_color),
+    mapping = aes(color = genus),
+    size = 2
+  ) +
+  scale_x_log10() + scale_y_log10() +
+  geom_vline(
+    xintercept = max_MIC,
+    linetype = "dashed"
+  )
+```
+
+```{r}
+df_antibiotics %>%
+  mutate(genus = word(bacteria, 1)) %>%
+  ggplot(aes(
+    x = neomycin,
+    y = streptomycin,
+    shape = gram
+  )) +
+  facet_grid(rows = vars(gram)) +
+  geom_point(size = 2) +
+  geom_point(
+    data = . %>% filter(genus %in% genus_color),
+    mapping = aes(color = genus),
+    size = 2
+  ) +
+  scale_x_log10() + scale_y_log10() +
+  geom_vline(
+    xintercept = max_MIC,
+    linetype = "dashed"
+  )
+```
+
+```{r}
+library(ggcube)
+
+df_antibiotics %>%
+  mutate(genus = word(bacteria, 1)) %>%
+  ggplot(aes(
+    x = penicillin,
+    y = neomycin,
+    z = streptomycin,
+  )) + 
+  geom_point() +
+  geom_point(
+    data = . %>% filter(genus %in% genus_color),
+    mapping = aes(color = genus),
+    size = 2
+  ) +
+  coord_3d() +
+  scale_y_log10() + 
+  scale_x_log10() +
+  scale_z_continuous(transform = "log10") +
+  labs(
+    x = "Penicillin MIC",
+    y = "Neomycin MIC",
+    z = "Streptomycin MIC",
+    color = "Genus",
+  )
+
+```
 
 # References
 
