@@ -2,11 +2,7 @@
 title: "Estimating Pi With a Shotgun"
 author: "Luca Odio"
 date: 2026-10-15
-output:
-  github_document:
-    toc: true
-prerequisites:
-  - e-stat06-clt
+output: github_document
 ---
 
 *Purpose*: Random sampling is extremely powerful. To build more intuition for how we can use random sampling to solve problems, we'll tackle what---at first blush---doesn't seem appropriate for a random approach: estimating fundamental deterministic constants. In this challenge you'll work through an example of turning a deterministic problem into a random sampling problem, and practice quantifying uncertainty in your estimate.
@@ -24,7 +20,7 @@ Unlike exercises, **challenges will be graded**. The following rubrics define ho
 <!-- ------------------------- -->
 
 | Category | Needs Improvement | Satisfactory |
-|------------------|-----------------------------|-------------------------|
+|----|----|----|
 | Effort | Some task **q**'s left unattempted | All task **q**'s attempted |
 | Observed | Did not document observations, or observations incorrect | Documented correct observations based on analysis |
 | Supported | Some observations not clearly supported by analysis | All observations clearly supported by analysis (table, graph, etc.) |
@@ -172,7 +168,7 @@ assertthat::assert_that(
     tibble(x = 0.5, y = 0.5) %>% # Pick a point *inside* the circle
     mutate(stat = stat(x, y)) %>% 
     pull(stat) %>% 
-    .[[4]] == 4,
+    .[[1]] == 4,
   # ???, # Write the correct value of stat() here
   msg = "Incorrect value when a point is inside the circle"
 )
