@@ -115,8 +115,8 @@ outcome of a measurement (e.g., drinking coffee before taking a test),
 that’s called an *experimental study*. You need to decide whether your
 study is observational or experimental.
 
-- This is an observational study were we ask how many mintutes of
-  vigerous physical activity per week and how tired the villager is on a
+- This is an observational study were we ask how many minutes of
+  vigorous physical activity per week and how tired the villager is on a
   scale from one to ten.
 
 #### Question / Hypothesis
@@ -303,8 +303,9 @@ other_result
 
 The first variable, minutes of physical activity in the past week, that
 we were looking at did not have enough power to be differentiated
-between the towns. Due to this lack of power, we collected additional
-data focusing one town. 
+between the towns. We can prove this by our confidence interval
+including zero. Due to this lack of power, we collected additional data
+focusing one town. 
 
 ### **New data**
 
@@ -369,45 +370,6 @@ comes next in this report.
 ``` r
 df_islanders %>%
   ggplot(aes(
-    x = Tiredness,
-    y = Minutes,
-    color = Sex
-  )) +
-  geom_point()
-```
-
-![](c10-islands-pt2-assignment_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
-
-``` r
-df_islanders %>%
-  ggplot(aes(
-    x = as.factor(Tiredness),
-    y = Minutes,
-  )) +
-  geom_boxplot()
-```
-
-![](c10-islands-pt2-assignment_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
-
-``` r
-df_islanders %>%
-  ggplot(aes(
-    x = as.factor(Tiredness),
-    y = Minutes,
-  )) +
-  geom_violin()
-```
-
-    ## Warning: Groups with fewer than two datapoints have been dropped.
-    ## ℹ Set `drop = FALSE` to consider such groups for position adjustment purposes.
-    ## Groups with fewer than two datapoints have been dropped.
-    ## ℹ Set `drop = FALSE` to consider such groups for position adjustment purposes.
-
-![](c10-islands-pt2-assignment_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
-
-``` r
-df_islanders %>%
-  ggplot(aes(
     x = as.factor(Tiredness),
     y = Minutes,
     color = Sex
@@ -415,7 +377,18 @@ df_islanders %>%
   geom_jitter(width = 0.1)
 ```
 
-![](c10-islands-pt2-assignment_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+![](c10-islands-pt2-assignment_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+
+``` r
+#TODO 
+df_islanders |> 
+  ggplot(aes(Minutes)) +
+  geom_histogram()
+```
+
+    ## `stat_bin()` using `bins = 30`. Pick better value `binwidth`.
+
+![](c10-islands-pt2-assignment_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
 
 ``` r
 df_islanders %>%
@@ -425,7 +398,7 @@ df_islanders %>%
   geom_bar()
 ```
 
-![](c10-islands-pt2-assignment_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+![](c10-islands-pt2-assignment_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
 
 ``` r
 df_islanders %>%
@@ -437,44 +410,7 @@ df_islanders %>%
   geom_bar(position = "dodge")
 ```
 
-![](c10-islands-pt2-assignment_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
-
-``` r
-df_islanders %>%
-  ggplot(aes(
-    x = Age,
-    y = Sex
-  )) +
-  geom_jitter(height = 0.05, width = 0)
-```
-
-![](c10-islands-pt2-assignment_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
-
-``` r
-df_islanders %>%
-  ggplot(aes(
-    x = Age,
-    y = Sex
-  )) +
-  geom_violin()
-```
-
-![](c10-islands-pt2-assignment_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
-
-``` r
-df_islanders %>%
-  ggplot(aes(
-    x = Sex,
-    y = Age
-  )) +
-  geom_boxplot()
-```
-
-![](c10-islands-pt2-assignment_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
-
-``` r
-# look at houses with 4+ people? plot minutes, plot tiredness (or color?)
-```
+![](c10-islands-pt2-assignment_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
 ### **q3** Key Analyses
 
@@ -484,10 +420,38 @@ grouped summary statistics (e.g., a proportion for group A, and for
 group B), or visualizations (e.g., a histogram). This section should be
 short, and every analysis should directly relate to q4.
 
-do a t test between the two sexes, see if they have comparable
-populations?
+To see if there is a correlation between tiredness and minutes of
+vigorous physical activity we ran a correlation test. Since the
+distribution of our data is not normal, we used a Spearman correlation
+test. The result of this test is a p-value which is not significant for
+a correlation in this sample.
+
+``` r
+# Run test
+cor.test(
+  df_islanders |> pull(Minutes),
+  df_islanders |> pull(Tiredness),
+  method = "spearman"
+)
+```
+
+    ## Warning in cor.test.default(pull(df_islanders, Minutes), pull(df_islanders, :
+    ## cannot compute exact p-value with ties
+
+    ## 
+    ##  Spearman's rank correlation rho
+    ## 
+    ## data:  pull(df_islanders, Minutes) and pull(df_islanders, Tiredness)
+    ## S = 475792, p-value = 0.3141
+    ## alternative hypothesis: true rho is not equal to 0
+    ## sample estimates:
+    ##         rho 
+    ## -0.08631128
 
 ### **q4** Answers
 
 Connect your Key Analyses to your questions / hypotheses. What did you
 conclude from your study?
+
+We did not find a significant correlation between minutes of exercise in
+the last week and the reported tiredness of an islander.
