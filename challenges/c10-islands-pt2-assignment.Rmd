@@ -73,7 +73,7 @@ While you provided this plan in c08 (Part 1), please include your plan here. In 
 
 The Islands allows you to ask islanders to complete tasks. If you just take measurements on your participants, then it's an *observational study*. But if you also introduce something that's meant to change the outcome of a measurement (e.g., drinking coffee before taking a test), that's called an *experimental study*. You need to decide whether your study is observational or experimental.
 
-- This is an observational study were we ask how many mintutes of vigerous physical activity per week and how tired the villager is on a scale from one to ten.
+- This is an observational study were we ask how many minutes of vigorous physical activity per week and how tired the villager is on a scale from one to ten.
 
 #### Question / Hypothesis
 
@@ -172,7 +172,7 @@ other_result <- t.test(rgroup1, rgroup2)
 other_result
 ```
 
-The first variable, minutes of physical activity in the past week, that we were looking at did not have enough power to be differentiated between the towns. Due to this lack of power, we collected additional data focusing one town. 
+The first variable, minutes of physical activity in the past week, that we were looking at did not have enough power to be differentiated between the towns. We can prove this by our confidence interval including zero. Due to this lack of power, we collected additional data focusing one town. 
 
 ### **New data**
 
@@ -211,39 +211,18 @@ Conduct an EDA on your data. Add as many code chunks as you need. Ensure your ED
 ```{r}
 df_islanders %>%
   ggplot(aes(
-    x = Tiredness,
-    y = Minutes,
-    color = Sex
-  )) +
-  geom_point()
-```
-
-```{r}
-df_islanders %>%
-  ggplot(aes(
-    x = as.factor(Tiredness),
-    y = Minutes,
-  )) +
-  geom_boxplot()
-```
-
-```{r}
-df_islanders %>%
-  ggplot(aes(
-    x = as.factor(Tiredness),
-    y = Minutes,
-  )) +
-  geom_violin()
-```
-
-```{r}
-df_islanders %>%
-  ggplot(aes(
     x = as.factor(Tiredness),
     y = Minutes,
     color = Sex
   )) +
   geom_jitter(width = 0.1)
+```
+
+```{r}
+#TODO 
+df_islanders |> 
+  ggplot(aes(Minutes)) +
+  geom_histogram()
 ```
 
 ```{r}
@@ -264,47 +243,23 @@ df_islanders %>%
   geom_bar(position = "dodge")
 ```
 
-```{r}
-df_islanders %>%
-  ggplot(aes(
-    x = Age,
-    y = Sex
-  )) +
-  geom_jitter(height = 0.05, width = 0)
-```
-
-```{r}
-df_islanders %>%
-  ggplot(aes(
-    x = Age,
-    y = Sex
-  )) +
-  geom_violin()
-```
-
-```{r}
-df_islanders %>%
-  ggplot(aes(
-    x = Sex,
-    y = Age
-  )) +
-  geom_boxplot()
-```
-
-```{r}
-# look at houses with 4+ people? plot minutes, plot tiredness (or color?)
-```
-
 ### **q3** Key Analyses
 
 Present the key analyses that support your questions / hypotheses. This could include summary statistics (e.g., a proportion of Islanders), grouped summary statistics (e.g., a proportion for group A, and for group B), or visualizations (e.g., a histogram). This section should be short, and every analysis should directly relate to q4.
 
+To see if there is a correlation between tiredness and minutes of vigorous physical activity we ran a correlation test. Since the distribution of our data is not normal, we used a Spearman correlation test. The result of this test is a p-value which is not significant for a correlation in this sample.
+
 ```{r conduct t-test}
-
+# Run test
+cor.test(
+  df_islanders |> pull(Minutes),
+  df_islanders |> pull(Tiredness),
+  method = "spearman"
+)
 ```
-
-do a t test between the two sexes, see if they have comparable populations?
 
 ### **q4** Answers
 
 Connect your Key Analyses to your questions / hypotheses. What did you conclude from your study?
+
+We did not find a significant correlation between minutes of exercise in the last week and the reported tiredness of an islander.
